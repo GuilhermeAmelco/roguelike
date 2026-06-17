@@ -2,6 +2,6 @@
 # The patch step will be re-executed if anything in this file changes.
 # No other meaning or use of this file is supported.
 
-command (connected)=C:/mingw64/bin/cmake.exe;-Dcan_fetch=YES;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;C:/Users/amelc/Code/personal/projects/roguelike/build/_deps/sdl3-subbuild/sdl3-populate-prefix/tmp/sdl3-populate-gitupdate.cmake
-command (disconnected)=C:/mingw64/bin/cmake.exe;-Dcan_fetch=NO;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;C:/Users/amelc/Code/personal/projects/roguelike/build/_deps/sdl3-subbuild/sdl3-populate-prefix/tmp/sdl3-populate-gitupdate.cmake
-work_dir=C:/Users/amelc/Code/personal/projects/roguelike/build/_deps/sdl3-src
+command (connected)=C:/mingw64/bin/cmake.exe;-Dcan_fetch=YES;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-subbuild/sdl3-populate-prefix/tmp/sdl3-populate-gitupdate.cmake
+command (disconnected)=C:/mingw64/bin/cmake.exe;-Dcan_fetch=NO;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-subbuild/sdl3-populate-prefix/tmp/sdl3-populate-gitupdate.cmake
+work_dir=C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-src

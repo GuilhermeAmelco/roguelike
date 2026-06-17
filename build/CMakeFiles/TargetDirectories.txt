@@ -1,8 +1,0 @@
-C:/Users/amelc/Code/personal/projects/roguelike/build/CMakeFiles/roguelike.dir
-C:/Users/amelc/Code/personal/projects/roguelike/build/CMakeFiles/edit_cache.dir
-C:/Users/amelc/Code/personal/projects/roguelike/build/CMakeFiles/rebuild_cache.dir
-C:/Users/amelc/Code/personal/projects/roguelike/build/_deps/sdl3-build/CMakeFiles/SDL3-shared.dir
-C:/Users/amelc/Code/personal/projects/roguelike/build/_deps/sdl3-build/CMakeFiles/SDL3_test.dir
-C:/Users/amelc/Code/personal/projects/roguelike/build/_deps/sdl3-build/CMakeFiles/SDL_uclibc.dir
-C:/Users/amelc/Code/personal/projects/roguelike/build/_deps/sdl3-build/CMakeFiles/edit_cache.dir
-C:/Users/amelc/Code/personal/projects/roguelike/build/_deps/sdl3-build/CMakeFiles/rebuild_cache.dir
