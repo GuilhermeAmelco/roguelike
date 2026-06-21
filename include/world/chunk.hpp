@@ -7,8 +7,8 @@
 // O chunk é um MOLDE, um bloco de memória limp de 16x16 que é preenchido por zeros. ele vai servir para guardar as informações de diferentes partes do mapa.
 namespace World
 {
-  const int CHUNK_SIZE = 32; // o chunk será 16x16 blocos
-  const int TILE_SIZE = 32;  // Cada bloco tem 16x16 pixeis
+  const int CHUNK_SIZE = 16; // o chunk será 16x16 blocos
+  const int TILE_SIZE = 16;  // Cada bloco tem 16x16 pixeis
 
   struct Chunk
   {

@@ -74,14 +74,6 @@ namespace World
                 // MATEMÁTICA CORRETA: Calcula a coluna interna (0 a 31) sem travar
                 int c = coluna_atual_do_arquivo - inicio_global_x;
 
-                // DEBUG CORRIGIDO: Se for a coluna interna 0 do Chunk(0,0), printe!
-                if (chunk_x == 0 && chunk_y == 0 && c == 0)
-                {
-                  cout << "Chunk(0,0) - Linha Interna " << l
-                       << " (Linha Global " << linha_atual
-                       << ") recebeu o ID: " << id_bloco << endl;
-                }
-
                 // Injeta o bloco no Chunk!
                 novo_chunk.definir_bloco(l, c, id_bloco);
               }
