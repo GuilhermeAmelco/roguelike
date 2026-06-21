@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(
-    MeuJogo
+    Roguelike
     VERSION 0.1.0
     LANGUAGES CXX
 )
@@ -32,14 +32,14 @@ file(
     src/*.cpp
 )
 
-add_executable(roguelike
+add_executable(${PROJECT_NAME}
     main.cpp
     ${SOURCES}
 )
 
 # Pasta include/
 target_include_directories(
-    roguelike
+    ${PROJECT_NAME}
     PRIVATE
         ./include
 )
@@ -47,14 +47,14 @@ target_include_directories(
 # Warnings
 if(MSVC)
     target_compile_options(
-        roguelike
+        ${PROJECT_NAME}
         PRIVATE
             /W4
             /permissive-
     )
 else()
     target_compile_options(
-        roguelike
+        ${PROJECT_NAME}
         PRIVATE
             -Wall
             -Wextra
@@ -66,16 +66,25 @@ endif()
 
 # Link SDL3
 target_link_libraries(
-    roguelike
+    ${PROJECT_NAME}
     PRIVATE
         SDL3::SDL3
 )
 
 # Copiar assets para a pasta do executável
 add_custom_command(
-    TARGET roguelike
+    TARGET ${PROJECT_NAME}
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${PROJECT_SOURCE_DIR}/assets
-        $<TARGET_FILE_DIR:roguelike>/assets
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
+)
+
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    COMMAND_EXPAND_LISTS
 )

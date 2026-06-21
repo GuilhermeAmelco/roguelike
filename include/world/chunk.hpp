@@ -2,12 +2,13 @@
 #define CHUNK_HPP
 
 #include <vector>
+#include <iostream>
 
 // O chunk é um MOLDE, um bloco de memória limp de 16x16 que é preenchido por zeros. ele vai servir para guardar as informações de diferentes partes do mapa.
 namespace World
 {
-  const int CHUNK_SIZE = 16; // o chunk será 16x16 blocos
-  const int TILE_SIZE = 16;  // Cada bloco tem 16x16 pixeis
+  const int CHUNK_SIZE = 32; // o chunk será 16x16 blocos
+  const int TILE_SIZE = 32;  // Cada bloco tem 16x16 pixeis
 
   struct Chunk
   {
@@ -30,6 +31,29 @@ namespace World
         {
           blocos[row][col] = 0;
         }
+      }
+    }
+
+    void definir_bloco(int linha, int coluna, int id_bloco)
+    {
+      if (linha >= 0 && linha < CHUNK_SIZE && coluna >= 0 && coluna < CHUNK_SIZE)
+      {
+        blocos[linha][coluna] = id_bloco;
+      }
+    }
+
+    void imprimir_chunk()
+    {
+      std::cout << "x: " << chunk_x << endl;
+      std::cout << "y: " << chunk_y << endl;
+
+      for (int linha = 0; linha < CHUNK_SIZE; linha++)
+      {
+        for (int coluna = 0; coluna < CHUNK_SIZE; coluna++)
+        {
+          std::cout << blocos[linha][coluna] << " ";
+        }
+        std::cout << endl;
       }
     }
   };

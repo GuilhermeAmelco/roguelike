@@ -1,5 +1,6 @@
 #include "core/Game.hpp"
 #include <iostream>
+#include <thread>
 
 namespace Core
 {
@@ -82,10 +83,25 @@ namespace Core
     // Limpa a tela com uma cor cinza escuro de fundo
     renderer->limpar_tela(30, 30, 30);
 
-    // --- DESENHAR O MUNDO (CHUNKS VIZINHOS) ---
-    // Vamos varrer uma área ao redor do jogador para desenhar os blocos
-    int jogador_chunk_x = static_cast<int>(player->obter_x()) / (World::CHUNK_SIZE * World::TILE_SIZE);
-    int jogador_chunk_y = static_cast<int>(player->obter_y()) / (World::CHUNK_SIZE * World::TILE_SIZE);
+    // 1. Calcula o tamanho total de um chunk em pixels (32 * 32 = 1024)
+    int chunk_pixel_size = World::CHUNK_SIZE * World::TILE_SIZE;
+
+    // 2. CONVERSÃO CORRETA: Protegendo contra arredondamentos errados em coordenadas negativas
+    int jogador_pixel_x = static_cast<int>(player->obter_x());
+    int jogador_pixel_y = static_cast<int>(player->obter_y());
+
+    int jogador_chunk_x;
+    int jogador_chunk_y;
+
+    if (jogador_pixel_x < 0)
+      jogador_chunk_x = (jogador_pixel_x - chunk_pixel_size + 1) / chunk_pixel_size;
+    else
+      jogador_chunk_x = jogador_pixel_x / chunk_pixel_size;
+
+    if (jogador_pixel_y < 0)
+      jogador_chunk_y = (jogador_pixel_y - chunk_pixel_size + 1) / chunk_pixel_size;
+    else
+      jogador_chunk_y = jogador_pixel_y / chunk_pixel_size;
 
     // Desenha o chunk atual e os vizinhos mais próximos
     for (int cx = jogador_chunk_x - 1; cx <= jogador_chunk_x + 1; ++cx)
@@ -94,6 +110,7 @@ namespace Core
       {
 
         World::Chunk *chunk = worldManager->obter_chunk(cx, cy);
+
         if (chunk != nullptr)
         {
           // Descobre a posição inicial desse chunk no mundo em pixels
@@ -105,19 +122,21 @@ namespace Core
           {
             for (int c = 0; c < World::CHUNK_SIZE; ++c)
             {
+              float bloco_mundo_x = chunk_mundo_x + (c * World::TILE_SIZE);
+              float bloco_mundo_y = chunk_mundo_y + (r * World::TILE_SIZE);
+
+              float tela_x = bloco_mundo_x - camera_x;
+              float tela_y = bloco_mundo_y - camera_y;
 
               // Desenha apenas se for parede (ID 1), que são as nossas bordinhas de teste
-              if (chunk->blocos[r][c] == 1)
+              switch (chunk->blocos[r][c])
               {
-                float bloco_mundo_x = chunk_mundo_x + (c * World::TILE_SIZE);
-                float bloco_mundo_y = chunk_mundo_y + (r * World::TILE_SIZE);
-
-                // APLICAÇÃO DA CÂMERA: Posição no mundo MENOS posição da câmera = Posição na Tela!
-                float tela_x = bloco_mundo_x - camera_x;
-                float tela_y = bloco_mundo_y - camera_y;
-
-                // Desenha o bloco como um quadrado verde
+              case 0:
+                renderer->desenhar_retangulo(tela_x, tela_y, World::TILE_SIZE, World::TILE_SIZE, 0, 0, 0);
+                break;
+              case 1:
                 renderer->desenhar_retangulo(tela_x, tela_y, World::TILE_SIZE, World::TILE_SIZE, 34, 139, 34);
+                break;
               }
             }
           }

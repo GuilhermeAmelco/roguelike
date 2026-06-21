@@ -45,7 +45,7 @@ namespace Entities
       if (cima)
         velocidade_y = -velocidade_movimento;
       else if (baixo)
-        velocidade_y = velocidade_y;
+        velocidade_y = velocidade_movimento;
       else
         velocidade_y = 0;
     }

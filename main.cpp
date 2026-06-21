@@ -1,9 +1,9 @@
 #include "core/Game.hpp"
 #include <iostream>
+#include <string>
 
 int main(int argc, char *argv[])
 {
-  std::cout << "Hello\n";
   Core::Game jogo;
   jogo.rodar();
   return 0;

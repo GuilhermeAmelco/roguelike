@@ -5,6 +5,9 @@ using namespace std;
 #include "chunk.hpp"
 #include <unordered_map>
 #include <string>
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
 namespace World
 {
@@ -31,18 +34,70 @@ namespace World
     void carregar_chunk(int chunk_x, int chunk_y)
     {
       string chave = gerar_chave_chunk(chunk_x, chunk_y);
+      ifstream arquivo_mapa("assets/data/map.txt");
 
-      // se nao for encontrado, cria um novo
+      if (!arquivo_mapa.is_open())
+      {
+        cerr << "Erro: não encontrei o arquivo de mapa!" << endl;
+        return;
+      }
+
+      // Se não for encontrado no mapa de memória, cria um novo
       if (chunks_carregados.find(chave) == chunks_carregados.end())
       {
-        // Criamos a variavel novo_chunk passando o x e y
         Chunk novo_chunk(chunk_x, chunk_y);
 
-        // inserir no array que guarda os chunks
+        int inicio_global_x = chunk_x * CHUNK_SIZE;
+        int inicio_global_y = chunk_y * CHUNK_SIZE;
+
+        string linha;
+        int linha_atual = 0;
+
+        // Lê o arquivo do começo ao fim naturalmente
+        while (getline(arquivo_mapa, linha))
+        {
+          // Verifica se a linha do arquivo pertence a este Chunk
+          if (linha_atual >= inicio_global_y && linha_atual < inicio_global_y + CHUNK_SIZE)
+          {
+            int l = linha_atual - inicio_global_y;
+
+            stringstream leitor(linha);
+            int id_bloco;
+            int coluna_atual_do_arquivo = 0;
+
+            while (leitor >> id_bloco)
+            {
+              // Verifica se a coluna do arquivo pertence a este Chunk
+              if (coluna_atual_do_arquivo >= inicio_global_x &&
+                  coluna_atual_do_arquivo < inicio_global_x + CHUNK_SIZE)
+              {
+                // MATEMÁTICA CORRETA: Calcula a coluna interna (0 a 31) sem travar
+                int c = coluna_atual_do_arquivo - inicio_global_x;
+
+                // DEBUG CORRIGIDO: Se for a coluna interna 0 do Chunk(0,0), printe!
+                if (chunk_x == 0 && chunk_y == 0 && c == 0)
+                {
+                  cout << "Chunk(0,0) - Linha Interna " << l
+                       << " (Linha Global " << linha_atual
+                       << ") recebeu o ID: " << id_bloco << endl;
+                }
+
+                // Injeta o bloco no Chunk!
+                novo_chunk.definir_bloco(l, c, id_bloco);
+              }
+              coluna_atual_do_arquivo++;
+            }
+          }
+
+          linha_atual++; // Avança sempre para a próxima linha do arquivo texturizado
+        }
+
+        arquivo_mapa.close();
+
+        // Inserir no mapa que guarda os chunks ativos na RAM
         chunks_carregados.insert({chave, novo_chunk});
       }
     }
-
     // 2. Metodo para descarregar as chunks da memoria RAM.
     // Criamos o descarregar chunk que serve para tirar do array caso o usuário se afaste do chunk
     void descarregar_chunk(int chunk_x, int chunk_y)
