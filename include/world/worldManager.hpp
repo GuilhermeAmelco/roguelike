@@ -185,44 +185,50 @@ namespace World
     {
       // pegamos o grid em volta do jogador
       // a coluna inicial, ou seja a coluna à esquerda será o proprio x
-      int coluna_inicial = jogador_pixel_x / TILE_SIZE;
+      int coluna_inicial = static_cast<int>(jogador_pixel_x) / TILE_SIZE;
       // a coluna final seria a posicao mais o tamanho horizontal do player ou seja a coluna a direta dele
-      int coluna_final = (jogador_pixel_x + tamanho_x) / TILE_SIZE;
+      int coluna_final = static_cast<int>(jogador_pixel_x + tamanho_x - 1) / TILE_SIZE;
       // a linha inicial o proprio y, ou seja a linha de cima;
-      int linha_inicial = jogador_pixel_y / TILE_SIZE;
+      int linha_inicial = static_cast<int>(jogador_pixel_y) / TILE_SIZE;
       // a linha final é o posicao y mais o tamanho vertical do player, assim representado a linha de baixo
-      int linha_final = (jogador_pixel_y + tamanho_y) / TILE_SIZE;
+      int linha_final = static_cast<int>(jogador_pixel_y + tamanho_y - 1) / TILE_SIZE;
 
-      for (int linha_global = linha_inicial; linha_global < linha_final; linha_global++)
+      for (int linha_global = linha_inicial; linha_global <= linha_final; linha_global++)
       {
-        for (int coluna_global = coluna_inicial; coluna_global < coluna_final; coluna_global++)
+        for (int coluna_global = coluna_inicial; coluna_global <= coluna_final; coluna_global++)
         {
-          // pegar as coordenadas da linha e da coluna atual no chunk que ela pertence
-          int chunk_x = linha_global / CHUNK_SIZE;
-          int chunk_y = coluna_global / CHUNK_SIZE;
-
+          // 1. Cálculo correto dos Chunks (Tratando os negativos corretamente)
+          int chunk_x = coluna_global / CHUNK_SIZE;
           if (coluna_global < 0)
             chunk_x = (coluna_global - CHUNK_SIZE + 1) / CHUNK_SIZE;
+
+          int chunk_y = linha_global / CHUNK_SIZE;
           if (linha_global < 0)
             chunk_y = (linha_global - CHUNK_SIZE + 1) / CHUNK_SIZE;
 
-          // pegar o chunk neh
+          // 2. Tenta obter o chunk correspondente
           Chunk *chunk = obter_chunk(chunk_x, chunk_y);
 
-          if (chunk != nullptr)
+          // SEGURANÇA 1: Se o chunk vizinho não estiver carregado na RAM ainda,
+          // nós retornamos TRUE (parede) para o jogador não entrar no limbo e crashar o jogo!
+          if (chunk == nullptr)
           {
-            int linha_interna = linha_global % CHUNK_SIZE;
-            int coluna_interna = coluna_global % CHUNK_SIZE;
+            return true;
+          }
 
-            int bloco_id = chunk->blocos[linha_interna][coluna_interna];
+          // 3. MATEMÁTICA DO RESTO SEGURO (Garante índices estritamente entre 0 e 31)
+          int linha_interna = (linha_global % CHUNK_SIZE + CHUNK_SIZE) % CHUNK_SIZE;
+          int coluna_interna = (coluna_global % CHUNK_SIZE + CHUNK_SIZE) % CHUNK_SIZE;
 
-            if (bloco_id == 1)
-            {
-              return true;
-            }
+          int bloco_id = chunk->blocos[linha_interna][coluna_interna];
+
+          if (bloco_id == 1)
+          {
+            return true; // Bateu em parede
           }
         }
       }
+      return false;
     }
 
     size_t quantidade_chunks_carregados() const

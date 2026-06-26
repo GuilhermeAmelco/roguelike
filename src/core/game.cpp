@@ -12,7 +12,7 @@ namespace Core
     worldManager = new World::WorldManager();
 
     // Coloca o jogador nascido no meio do pixel zero
-    player = new Entities::Player(0.0f, 0.0f);
+    player = new Entities::Player(32.0f, 32.0f, worldManager);
   }
 
   Game::~Game()
