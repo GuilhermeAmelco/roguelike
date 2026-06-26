@@ -1,8 +1,0 @@
-C:/Users/Guilherme/Code/univali/roguelike/build/CMakeFiles/Roguelike.dir
-C:/Users/Guilherme/Code/univali/roguelike/build/CMakeFiles/edit_cache.dir
-C:/Users/Guilherme/Code/univali/roguelike/build/CMakeFiles/rebuild_cache.dir
-C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-build/CMakeFiles/SDL3-shared.dir
-C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-build/CMakeFiles/SDL3_test.dir
-C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-build/CMakeFiles/SDL_uclibc.dir
-C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-build/CMakeFiles/edit_cache.dir
-C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-build/CMakeFiles/rebuild_cache.dir

@@ -1,6 +1,7 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include "world/worldManager.hpp"
 namespace Entities
 {
   class Player
@@ -19,6 +20,7 @@ namespace Entities
 
     // o tamanho do nosso quadrado do jogador na tela
     int tamanho;
+    World::WorldManager *worldManager;
 
   public:
     // Construtor inicializa o jogador em uma posição inicial do mundo
@@ -54,8 +56,17 @@ namespace Entities
     void atualizar(float delta_time)
     {
       // A posicao muda multiplicando a velocidade pelo tempo
-      x += velocidade_x * delta_time;
-      y += velocidade_y * delta_time;
+      float proximo_x = x + velocidade_x * delta_time;
+      if (!worldManager->existe_colisao_na_posicao(proximo_x, y, tamanho, tamanho))
+      {
+        x += velocidade_x * delta_time;
+      }
+
+      float proximo_y = y + velocidade_y * delta_time;
+      if (!worldManager->existe_colisao_na_posicao(x, proximo_y, tamanho, tamanho))
+      {
+        y += velocidade_y * delta_time;
+      }
     }
 
     // helpers para ajudar a debugar

@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"C:/Users/Guilherme/Code/univali/roguelike/build/cmake_install.cmake",
-		"C:/Users/Guilherme/Code/univali/roguelike/build/_deps/sdl3-build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
