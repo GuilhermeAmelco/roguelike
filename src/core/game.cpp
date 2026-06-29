@@ -63,6 +63,20 @@ namespace Core
           break;
         }
       }
+      else if (evento.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+      {
+        if (evento.button.button == SDL_BUTTON_LEFT)
+        {
+          // No SDL3, evento.button.x e y são FLOAT
+          float mouseX = evento.button.x;
+          float mouseY = evento.button.y;
+
+          float camera_x = player->obter_x() - (renderer->obter_largura() / 2.0f);
+          float camera_y = player->obter_y() - (renderer->obter_altura() / 2.0f);
+          // Passa as coordenadas obtidas para a função do seu jogador
+          player->atirar(mouseX, mouseY, camera_x, camera_y);
+        }
+      }
     }
   }
 
@@ -74,7 +88,7 @@ namespace Core
 
     // 2. Faz o sistema de Chunks atualizar baseado na nova posição do jogador
     worldManager->atualizar_mundo(player->obter_x(), player->obter_y());
-
+    worldManager->atualizar_projeteis(delta_time);
     // 3. Centraliza a Câmera no jogador
     // (Posição do jogador menos a metade da tela para ele ficar bem no centro)
     camera_x = player->obter_x() - (renderer->obter_largura() / 2.0f);
@@ -140,6 +154,9 @@ namespace Core
               case 1:
                 renderer->desenhar_retangulo(tela_x, tela_y, World::TILE_SIZE, World::TILE_SIZE, 34, 139, 34);
                 break;
+              case 5:
+                renderer->desenhar_retangulo(tela_x, tela_y, World::TILE_SIZE, World::TILE_SIZE, 128, 128, 128);
+                break;
               }
             }
           }
@@ -147,6 +164,47 @@ namespace Core
       }
     }
 
+    std::vector<World::Chunk *> chunks_visiveis = worldManager->obter_chunks_ativos_ao_redor();
+    for (World::Chunk *chunk : chunks_visiveis)
+    {
+      for (const auto &item : chunk->itens)
+      {
+        if (item.obter_tipo() == Entities::CHAVE)
+        {
+          renderer->desenhar_retangulo(item.obter_x(), item.obter_y(), item.obter_altura(), item.obter_largura(), 255, 215, 0);
+        }
+        else if (item.obter_tipo() == Entities::BAU)
+        {
+          if (item.foi_interagido())
+          {
+            renderer->desenhar_retangulo(item.obter_x(), item.obter_y(), item.obter_altura(), item.obter_largura(), 205, 133, 63);
+          }
+          else
+          {
+            renderer->desenhar_retangulo(item.obter_x(), item.obter_y(), item.obter_altura(), item.obter_largura(), 139, 69, 19);
+          }
+        }
+      }
+    }
+
+    // --- DESENHAR PROJÉTEIS ---
+    const auto &projeteis = worldManager->obter_projeteis();
+
+    for (const auto &p : projeteis)
+    {
+      float tela_x = p.obter_x() - camera_x;
+      float tela_y = p.obter_y() - camera_y;
+
+      int tamanho = p.obter_tamanho();
+
+      // projétil como um quadrado amarelo simples
+      renderer->desenhar_retangulo(
+          tela_x,
+          tela_y,
+          tamanho,
+          tamanho,
+          255, 255, 0);
+    }
     // --- DESENHAR O JOGADOR ---
     float player_tela_x = player->obter_x() - camera_x;
     float player_tela_y = player->obter_y() - camera_y;
