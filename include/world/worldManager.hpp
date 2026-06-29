@@ -222,7 +222,7 @@ namespace World
 
           int bloco_id = chunk->blocos[linha_interna][coluna_interna];
 
-          if (bloco_id == 1)
+          if (bloco_id == 1 || bloco_id == 5)
           {
             return true; // Bateu em parede
           }
@@ -231,10 +231,57 @@ namespace World
       return false;
     }
 
+    int obter_bloco_na_posicao(float pixel_x, float pixel_y)
+    {
+      int bloco_x = static_cast<int>(pixel_x) / TILE_SIZE;
+      int bloco_y = static_cast<int>(pixel_y) / TILE_SIZE;
+
+      int chunk_x = bloco_x / CHUNK_SIZE;
+      if (bloco_x < 0)
+        chunk_x = (bloco_x - CHUNK_SIZE + 1) / CHUNK_SIZE;
+
+      int chunk_y = bloco_y / CHUNK_SIZE;
+      if (bloco_y < 0)
+        chunk_y = (bloco_y - CHUNK_SIZE + 1) / CHUNK_SIZE;
+
+      Chunk *chunk = obter_chunk(chunk_x, chunk_y);
+      if (chunk == nullptr)
+        return 1; // Se o chunk não existir, trata como parede por segurança
+
+      int linha_interna = (bloco_y % CHUNK_SIZE + CHUNK_SIZE) % CHUNK_SIZE;
+      int coluna_interna = (bloco_x % CHUNK_SIZE + CHUNK_SIZE) % CHUNK_SIZE;
+
+      return chunk->blocos[linha_interna][coluna_interna];
+    }
+
+    void definir_bloco_na_posicao(float pixel_x, float pixel_y, int novo_id)
+    {
+      int bloco_x = static_cast<int>(pixel_x) / TILE_SIZE;
+      int bloco_y = static_cast<int>(pixel_y) / TILE_SIZE;
+
+      int chunk_x = bloco_x / CHUNK_SIZE;
+      if (bloco_x < 0)
+        chunk_x = (bloco_x - CHUNK_SIZE + 1) / CHUNK_SIZE;
+
+      int chunk_y = bloco_y / CHUNK_SIZE;
+      if (bloco_y < 0)
+        chunk_y = (bloco_y - CHUNK_SIZE + 1) / CHUNK_SIZE;
+
+      Chunk *chunk = obter_chunk(chunk_x, chunk_y);
+      if (chunk != nullptr)
+      {
+        int linha_interna = (bloco_y % CHUNK_SIZE + CHUNK_SIZE) % CHUNK_SIZE;
+        int coluna_interna = (bloco_x % CHUNK_SIZE + CHUNK_SIZE) % CHUNK_SIZE;
+
+        chunk->blocos[linha_interna][coluna_interna] = novo_id;
+      }
+    }
+
     size_t quantidade_chunks_carregados() const
     {
       return chunks_carregados.size();
     }
+    int obter_tile_size() const { return TILE_SIZE; }
   };
 }
 

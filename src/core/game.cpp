@@ -8,11 +8,11 @@ namespace Core
   Game::Game() : rodando(true)
   {
     // Inicializa nossos módulos (Janela 800x600)
-    renderer = new Graphics::Renderer("Meu Jogo 2D - Teste de Chunks", 800, 600);
+    renderer = new Graphics::Renderer("Meu Jogo 2D - Teste de Chunks", 1200, 800);
     worldManager = new World::WorldManager();
 
     // Coloca o jogador nascido no meio do pixel zero
-    player = new Entities::Player(32.0f, 32.0f, worldManager);
+    player = new Entities::Player(1350.0f, 512.0f, worldManager);
   }
 
   Game::~Game()
@@ -54,6 +54,9 @@ namespace Core
         case SDLK_S:
         case SDLK_DOWN:
           tecla_baixo = status;
+          break;
+        case SDLK_E:
+          player->interagir();
           break;
         case SDLK_ESCAPE:
           rodando = false;
